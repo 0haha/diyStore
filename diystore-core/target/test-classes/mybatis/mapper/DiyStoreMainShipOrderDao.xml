@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gradutation.design.ljx.dao.DiyStoreMainShipOrderDao">
+
+    <resultMap id="DiyStoreMainShipOrderResultMap" type="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
+        <id column="id" property="id" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_modified" property="gmtModified" />
+        <result column="buyer_id" property="buyerId" jdbcType="INTEGER" javaType="java.lang.Long"/>
+        <result column="buyer_nick" property="buyerNick" jdbcType="VARCHAR" javaType="string"/>
+        <result column="seller_id" property="sellerId" jdbcType="INTEGER" javaType="java.lang.Long"/>
+        <result column="seller_nick" property="sellerNick" jdbcType="VARCHAR" javaType="string"/>
+        <result column="post_code" property="postCode" jdbcType="VARCHAR" javaType="string"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR" javaType="string"/>
+        <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" javaType="string"/>
+        <result column="country" property="country" jdbcType="VARCHAR" javaType="string"/>
+        <result column="prov" property="prov" jdbcType="VARCHAR" javaType="string"/>
+        <result column="city" property="city" jdbcType="VARCHAR" javaType="string"/>
+        <result column="area" property="area" jdbcType="VARCHAR" javaType="string"/>
+        <result column="town" property="town" jdbcType="VARCHAR" javaType="string"/>
+        <result column="address" property="address" jdbcType="VARCHAR" javaType="string"/>
+        <result column="status" property="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="attribute" property="attribute" jdbcType="VARCHAR" javaType="string"/>
+        <result column="row_version" property="rowVersion" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="row_status" property="rowStatus" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" javaType="string"/>
+        <result column="pay_type" property="payType" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <sql id="all_column_list">
+        id,
+        gmt_create,
+        gmt_modified,
+        buyer_id,
+        buyer_nick,
+        seller_id,
+        seller_nick,
+        post_code,
+        phone,
+        mobile_phone,
+        country,
+        prov,
+        city,
+        area,
+        town,
+        address,
+        status,
+        attribute,
+        row_version,
+        row_status,
+        buyer_message,
+        pay_type
+    </sql>
+
+    <sql id="base_where_clause">
+        <where>
+            row_status = 0
+            <if test="id != null"> and id = #{id} </if>
+            <if test="status != null"> and status = #{status} </if>
+            <if test="sellerId != null"> and status = #{status} </if>
+            AND buyer_id = #{buyerId}
+        </where>
+    </sql>
+
+
+    <insert id="insert" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into diystore_main_ship_order (
+        <include refid="all_column_list" />
+        )
+        values (
+        #{id},
+        #{gmtCreate},
+        #{gmtModified},
+        #{buyerId},
+        #{buyerNick},
+        #{sellerId},
+        #{sellerNick},
+        #{postCode},
+        #{phone},
+        #{mobilePhone},
+        #{country},
+        #{prov},
+        #{city},
+        #{area},
+        #{town},
+        #{address},
+        #{status},
+        #{attribute},
+        0,
+        0,
+        #{buyerMessage},
+        #{payType}
+        )
+    </insert>
+
+    <select id="queryById" resultMap="DiyStoreMainShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO" parameterType="java.lang.Long">
+        select
+        <include refid="all_column_list" />
+        from diystore_main_ship_order
+        where id = #{id}
+    </select>
+
+
+    <select id="queryByPage" resultMap="DiyStoreMainShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreMainShipOrderQuery">
+        select
+        <include refid="all_column_list" />
+        from diystore_main_ship_order
+        <include refid="base_where_clause" />
+        order by gmt_create DESC
+        limit #{startPos}, #{pageSize}
+    </select>
+
+    <select id="query" resultMap="DiyStoreMainShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
+        select
+        <include refid="all_column_list" />
+        from diystore_main_ship_order
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(id) from diystore_main_ship_order
+    </select>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from diystore_main_ship_order
+        where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
+        update diystore_main_ship_order
+        <set>
+            gmt_modified = now(),
+            row_version = row_version + 1,
+            <if test="status != null">status = #{status},</if>
+            <if test="rowStatus != null">row_status = #{rowStatus},</if>
+            <if test="attribute != null and attribute != '' ">attribute = #{attribute},</if>
+            <if test="phone != null and phone != '' ">phone = #{phone},</if>
+            <if test="mobilePhone != null and mobilePhone != '' ">mobile_phone = #{mobilePhone},</if>
+            <if test="prov != null and prov != '' ">prov = #{prov},</if>
+            <if test="city != null and city != '' ">city = #{city},</if>
+            <if test="area != null and area != '' ">area = #{area},</if>
+            <if test="town != null and town != '' ">town = #{town},</if>
+            <if test="address != null and address != '' ">address = #{address},</if>
+            <if test="buyerMessage != null and buyerMessage != '' ">buyer_message = #{buyerMessage},</if>
+        </set>
+        where buyer_id = #{buyerId}  and id = #{id} and row_version = #{rowVersion}
+    </update>
+
+</mapper>
