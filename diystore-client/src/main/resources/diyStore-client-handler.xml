@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+<!-- <bean id="cancelShipHandler" class="com.graduation.design.ljx.handler.impl.CancelShipHandler"/> -->
+
+<bean id="userLoginHandler" class="com.graduation.design.ljx.handler.impl.UserLoginHandlerImpl">
+  <property name="executors" value="userLoginChecker"/>
+</bean>
+
+  <bean id="constructOrderHandler" class="com.graduation.design.ljx.handler.impl.ConstructOrderHandlerImpl">
+    <property name="executors" value="checkShipOrder,constructShipOrder"/>
+  </bean>
+
+</beans>

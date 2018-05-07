@@ -8,4 +8,16 @@
      http://www.springframework.org/schema/jdbc
 ">
 
+   <!-- <bean id = "propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:jdbc.properties"/>
+    </bean>-->
+
+
+
+    <import resource="classpath*:/diyStore-client.xml" />
+    <import resource="classpath*:/spring/diystore-core-service.xml"/>
+
+    <import resource="classpath*:/mybatis/mybatis-spring.xml"/>
+
+    <import resource="/bean/web-spring-bean.xml"/>
 </beans>

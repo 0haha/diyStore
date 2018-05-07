@@ -9,11 +9,17 @@ public class DiyStoreMainShipOrderQuery extends PageQuery{
 
     private Long id;
 
+    private Long mainShipOrderId;
+
     private Long buyerId;
 
     private Long sellerId;
 
     private Integer status;
+
+    private Long lbxNo;
+
+    private Integer bizType;
 
     public Long getId() {
         return id;
@@ -45,5 +51,29 @@ public class DiyStoreMainShipOrderQuery extends PageQuery{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Long getmainShipOrderId() {
+        return mainShipOrderId;
+    }
+
+    public void setmainShipOrderId(Long mainShipOrderId) {
+        this.mainShipOrderId = mainShipOrderId;
+    }
+
+    public Long getLbxNo() {
+        return lbxNo;
+    }
+
+    public void setLbxNo(Long lbxNo) {
+        this.lbxNo = lbxNo;
+    }
+
+    public Integer getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(Integer bizType) {
+        this.bizType = bizType;
     }
 }

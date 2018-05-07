@@ -1,80 +1,59 @@
 package com.gradutation.design.ljx.domain.dataobject;
 
+import java.util.Date;
+
 /**
  * Created by hehe on 18-2-5.
  */
 public class DiyStoreMainShipOrderDO extends DiyStoreBaseDO{
 
     private static final long serialVersionUID = -2373059571241335447L;
-    /**
-     * 买家id
-     */
+
+    private Long mainShipOrderId;
     private Long buyerId;
-    /**
-     * 买家昵称
-     */
     private String buyerNick;
-    /**
-     * 卖家id
-     */
     private Long sellerId;
-    /**
-     * 卖家昵称
-     */
     private String sellerNick;
-    /**
-     * 邮编
-     */
+    private String consignee;
     private String postCode;
-    /**
-     * 座机
-     */
     private String phone;
-    /**
-     * 手机
-     */
     private String mobilePhone;
-
-    /**
-     * 国家
-     */
     private String country;
-
-    /**
-     * 省
-     */
     private String prov;
-
-    /**
-     * 市
-     */
     private String city;
-
-    /**
-     * 区县
-     */
     private String area;
-
-    /**
-     * 镇
-     */
     private String town;
-    /**
-     * 街道地址
-     */
     private String address;
-    /**
-     * 买家留言信息
-     */
-    private String buyerMessage;
-    /**
-     * 状态
-     */
+    private Date deliveryConfirmTime;
+    private Double shipFormFee;
+    private Double discountFee;
+    private Long storeHouseCode;
+    private String storeHouseName;
+    private Long lbxNo;
+    private String cancelDeliveryReason;
+    private Integer shipType;
+    private Integer bizType;
     private Integer status;
-    /**
-     * 付款方式
-     */
+    private String buyerMessage;
     private Integer payType;
+    private Integer skuAmount;
+    private String sellerMessage;
+    private Date approveTime;
+    private Date fetchTime;
+    private String errorCode;
+    private String errorMessage;
+    private Date payTime;
+    private Date tradeSuccessTime;
+
+
+
+    public Long getmainShipOrderId() {
+        return mainShipOrderId;
+    }
+
+    public void setmainShipOrderId(Long mainShipOrderId) {
+        this.mainShipOrderId = mainShipOrderId;
+    }
 
     public Long getBuyerId() {
         return buyerId;
@@ -106,6 +85,14 @@ public class DiyStoreMainShipOrderDO extends DiyStoreBaseDO{
 
     public void setSellerNick(String sellerNick) {
         this.sellerNick = sellerNick;
+    }
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
     }
 
     public String getPostCode() {
@@ -180,12 +167,76 @@ public class DiyStoreMainShipOrderDO extends DiyStoreBaseDO{
         this.address = address;
     }
 
-    public String getBuyerMessage() {
-        return buyerMessage;
+    public Date getDeliveryConfirmTime() {
+        return deliveryConfirmTime;
     }
 
-    public void setBuyerMessage(String buyerMessage) {
-        this.buyerMessage = buyerMessage;
+    public void setDeliveryConfirmTime(Date deliveryConfirmTime) {
+        this.deliveryConfirmTime = deliveryConfirmTime;
+    }
+
+    public Double getShipFormFee() {
+        return shipFormFee;
+    }
+
+    public void setShipFormFee(Double shipFormFee) {
+        this.shipFormFee = shipFormFee;
+    }
+
+    public Double getDiscountFee() {
+        return discountFee;
+    }
+
+    public void setDiscountFee(Double discountFee) {
+        this.discountFee = discountFee;
+    }
+
+    public Long getStoreHouseCode() {
+        return storeHouseCode;
+    }
+
+    public void setStoreHouseCode(Long storeHouseCode) {
+        this.storeHouseCode = storeHouseCode;
+    }
+
+    public String getStoreHouseName() {
+        return storeHouseName;
+    }
+
+    public void setStoreHouseName(String storeHouseName) {
+        this.storeHouseName = storeHouseName;
+    }
+
+    public Long getLbxNo() {
+        return lbxNo;
+    }
+
+    public void setLbxNo(Long lbxNo) {
+        this.lbxNo = lbxNo;
+    }
+
+    public String getCancelDeliveryReason() {
+        return cancelDeliveryReason;
+    }
+
+    public void setCancelDeliveryReason(String cancelDeliveryReason) {
+        this.cancelDeliveryReason = cancelDeliveryReason;
+    }
+
+    public Integer getShipType() {
+        return shipType;
+    }
+
+    public void setShipType(Integer shipType) {
+        this.shipType = shipType;
+    }
+
+    public Integer getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(Integer bizType) {
+        this.bizType = bizType;
     }
 
     public Integer getStatus() {
@@ -196,11 +247,84 @@ public class DiyStoreMainShipOrderDO extends DiyStoreBaseDO{
         this.status = status;
     }
 
+
+    public String getBuyerMessage() {
+        return buyerMessage;
+    }
+
+    public void setBuyerMessage(String buyerMessage) {
+        this.buyerMessage = buyerMessage;
+    }
+
     public Integer getPayType() {
         return payType;
     }
 
     public void setPayType(Integer payType) {
         this.payType = payType;
+    }
+
+    public Integer getSkuAmount() {
+        return skuAmount;
+    }
+
+    public void setSkuAmount(Integer skuAmount) {
+        this.skuAmount = skuAmount;
+    }
+
+    public String getSellerMessage() {
+        return sellerMessage;
+    }
+
+    public void setSellerMessage(String sellerMessage) {
+        this.sellerMessage = sellerMessage;
+    }
+
+    public Date getApproveTime() {
+        return approveTime;
+    }
+
+    public void setApproveTime(Date approveTime) {
+        this.approveTime = approveTime;
+    }
+
+    public Date getFetchTime() {
+        return fetchTime;
+    }
+
+    public void setFetchTime(Date fetchTime) {
+        this.fetchTime = fetchTime;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+    public Date getTradeSuccessTime() {
+        return tradeSuccessTime;
+    }
+
+    public void setTradeSuccessTime(Date tradeSuccessTime) {
+        this.tradeSuccessTime = tradeSuccessTime;
     }
 }

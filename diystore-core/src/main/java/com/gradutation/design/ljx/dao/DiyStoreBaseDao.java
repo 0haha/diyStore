@@ -15,10 +15,14 @@ public interface DiyStoreBaseDao<D,Q> {
 
     D queryById(long id);
 
+    List<D> query();
+
     List<D> queryByPage(Q q);
 
-    int updateByQuery(Q q);
+//    int updateByQuery(Q q);
 
-    int count();
+    int count(Q q);
+
+    D deleteByPage(Q q);
 
 }

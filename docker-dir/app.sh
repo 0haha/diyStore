@@ -6,6 +6,7 @@
 # 2  => bad usage
 # 3  => tomcat start failed
 # 4  => nginx start failed
+# 5  => zookeeper start failed
 
 export PROG_NAME=$0
 export ACTION=$1
@@ -95,10 +96,16 @@ stop_tomcatjdk_docker(){
 }
 
 stop_nginx_docker(){
-
      write_back_nginx_conf
      docker ps -a |  grep 'nginx' | awk '{print $1}' |  xargs --no-run-if-empty docker stop || exit 1
+}
 
+start_zookeeper_docker(){
+    docker run -d zookeeper:latest || exit  5
+}
+
+stop_zookeeper_docker(){
+    docker ps -a |  grep 'zookeeper' | awk '{print $1}' |  xargs --no-run-if-empty docker stop || exit 1
 }
 
 start(){
@@ -108,11 +115,13 @@ start(){
    clean_docker_none
    produce_nginx_conf
    run_nginx_docker
+   start_zookeeper_docker
 }
 
 stop(){
    stop_tomcatjdk_docker
    stop_nginx_docker
+   stop_zookeeper_docker
 }
 
 restart(){
@@ -133,6 +142,11 @@ restartTomcat(){
   clean_docker_none
 }
 
+restartZookeeper(){
+  stop_zookeeper_docker
+  start_zookeeper_docker
+}
+
 
 case "$ACTION" in
    start)
@@ -150,8 +164,8 @@ case "$ACTION" in
    restartTomcat)
       restartTomcat
       ;;
-   stopNginx)
-      stop_nginx_docker
+   restartZookeeper)
+      restartZookeeper
       ;;
    *)
       usage
