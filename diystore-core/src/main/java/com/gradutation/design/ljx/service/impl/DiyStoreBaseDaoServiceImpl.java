@@ -106,11 +106,11 @@ public abstract class DiyStoreBaseDaoServiceImpl<T extends DiyStoreBaseDTO,D ext
        rst.setPageIndex(q.getPageIndex());
        rst.setPageSize(q.getPageSize());
        try{
-          int count = this.getDao().count(q);
-           if(count == 0){
-               return diyStoreProcessorResult;
-           }
-           rst.setTotalCount(count);
+         // int count = this.getDao().count(q);
+         //  if(count == 0){
+         //      return diyStoreProcessorResult;
+         //  }
+         //  rst.setTotalCount(count);
            List<D> dList = this.getDao().queryByPage(q);
            rst.succ(this.mapDO2DTO(dList));
            diyStoreProcessorResult.setModel(rst);

@@ -1,6 +1,6 @@
 export BUILD_APP_NAME=diyStore
 export JAVA_HOME=/home/admin/$BUILD_APP_NAME/java/jdk1.8.0_161
-export TOMCAT_HOME=/home/admin/$BUILD_APP_NAME/tomcat/apache-tomcat-9.0.4
+export TOMCAT_HOME=/home/admin/$BUILD_APP_NAME/tomcat/apache-tomcat-7.0.88
 
 case $1 in
 start)

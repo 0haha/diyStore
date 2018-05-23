@@ -3,38 +3,60 @@
 <mapper namespace="com.gradutation.design.ljx.dao.DiyStoreMainShipOrderDao">
 
     <resultMap id="DiyStoreMainShipOrderResultMap" type="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
-        <id column="id" property="id" />
-        <result column="gmt_create" property="gmtCreate" />
-        <result column="gmt_modified" property="gmtModified" />
-        <result column="buyer_id" property="buyerId" jdbcType="INTEGER" javaType="java.lang.Long"/>
-        <result column="buyer_nick" property="buyerNick" jdbcType="VARCHAR" javaType="string"/>
-        <result column="seller_id" property="sellerId" jdbcType="INTEGER" javaType="java.lang.Long"/>
-        <result column="seller_nick" property="sellerNick" jdbcType="VARCHAR" javaType="string"/>
-        <result column="post_code" property="postCode" jdbcType="VARCHAR" javaType="string"/>
-        <result column="phone" property="phone" jdbcType="VARCHAR" javaType="string"/>
-        <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" javaType="string"/>
-        <result column="country" property="country" jdbcType="VARCHAR" javaType="string"/>
-        <result column="prov" property="prov" jdbcType="VARCHAR" javaType="string"/>
-        <result column="city" property="city" jdbcType="VARCHAR" javaType="string"/>
-        <result column="area" property="area" jdbcType="VARCHAR" javaType="string"/>
-        <result column="town" property="town" jdbcType="VARCHAR" javaType="string"/>
-        <result column="address" property="address" jdbcType="VARCHAR" javaType="string"/>
-        <result column="status" property="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="attribute" property="attribute" jdbcType="VARCHAR" javaType="string"/>
-        <result column="row_version" property="rowVersion" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="row_status" property="rowStatus" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" javaType="string"/>
-        <result column="pay_type" property="payType" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <id column="id" property="id"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="main_ship_order_id" property="mainShipOrderId"/>
+        <result column="buyer_id" property="buyerId"/>
+        <result column="buyer_nick" property="buyerNick"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="seller_nick" property="sellerNick"/>
+        <result column="consignee" property="consignee"/>
+        <result column="post_code" property="postCode"/>
+        <result column="phone" property="phone"/>
+        <result column="mobile_phone" property="mobilePhone"/>
+        <result column="country" property="country"/>
+        <result column="prov" property="prov"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="town" property="town"/>
+        <result column="address" property="address"/>
+        <result column="delivery_confirm_time" property="deliveryConfirmTime"/>
+        <result column="ship_form_fee" property="shipFormFee"/>
+        <result column="discount_fee" property="discountFee"/>
+        <result column="store_house_code" property="storeHouseCode"/>
+        <result column="store_house_name" property="storeHouseName"/>
+        <result column="lbx_no" property="lbxNo"/>
+        <result column="cancel_delivery_reason" property="cancelDeliveryReason"/>
+        <result column="ship_type" property="shipType"/>
+        <result column="biz_type" property="bizType"/>
+        <result column="status" property="status"/>
+        <result column="attribute" property="attribute"/>
+        <result column="row_version" property="rowVersion"/>
+        <result column="row_status" property="rowStatus"/>
+        <result column="buyer_message" property="buyerMessage"/>
+        <result column="pay_type" property="payType"/>
+        <result column="sku_amount" property="skuAmount"/>
+        <result column="seller_message" property="sellerMessage"/>
+        <result column="approve_time" property="approveTime"/>
+        <result column="fetch_time" property="fetchTime"/>
+        <result column="error_code" property="errorCode"/>
+        <result column="error_message" property="errorMessage"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="trade_success_time" property="tradeSuccessTime"/>
     </resultMap>
+
 
     <sql id="all_column_list">
         id,
         gmt_create,
         gmt_modified,
+        main_ship_order_id,
         buyer_id,
         buyer_nick,
         seller_id,
         seller_nick,
+        consignee,
         post_code,
         phone,
         mobile_phone,
@@ -44,40 +66,61 @@
         area,
         town,
         address,
+        delivery_confirm_time,
+        ship_form_fee,
+        discount_fee,
+        store_house_code,
+        store_house_name,
+        lbx_no,
+        cancel_delivery_reason,
+        ship_type,
+        biz_type,
         status,
         attribute,
         row_version,
         row_status,
         buyer_message,
-        pay_type
+        pay_type,
+        sku_amount,
+        seller_message,
+        approve_time,
+        fetch_time,
+        error_code,
+        error_message,
+        pay_time,
+        trade_success_time
     </sql>
 
     <sql id="base_where_clause">
         <where>
             row_status = 0
             <if test="id != null"> and id = #{id} </if>
+            <if test="mainShipOrderId != null">and main_ship_order_id = #{mainShipOrderId} </if>
             <if test="status != null"> and status = #{status} </if>
-            <if test="sellerId != null"> and status = #{status} </if>
-            AND buyer_id = #{buyerId}
+            <if test="buyerId != null">and buyer_id = #{buyerId}</if>
+            <if test="sellerId != null">and seller_id = #{sellerId}</if>
+            <if test="lbxNo != null">and lbx_no = #{lbxNo} </if>
+            <if test="bizType != null">and biz_type = #{bizType}</if>
         </where>
     </sql>
-
 
     <insert id="insert" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
         <selectKey keyProperty="id" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into diystore_main_ship_order (
+        insert into DSMainShipOrder (
         <include refid="all_column_list" />
         )
         values (
         #{id},
-        #{gmtCreate},
-        #{gmtModified},
+        <choose><when test="gmtCreate != null">#{gmtCreate}</when><otherwise>now()</otherwise></choose>,
+        <choose><when test="gmtModified != null">#{gmtModified}</when><otherwise>now()</otherwise></choose>,
+        #{mainShipOrderId},
         #{buyerId},
         #{buyerNick},
         #{sellerId},
         #{sellerNick},
+        #{consignee},
         #{postCode},
         #{phone},
         #{mobilePhone},
@@ -87,19 +130,36 @@
         #{area},
         #{town},
         #{address},
+        #{deliveryConfirmTime},
+        #{shipFormFee},
+        #{discountFee},
+        #{storeHouseCode},
+        #{storeHouseName},
+        #{lbxNo},
+        #{cancelDeliveryReason},
+        #{shipType},
+        #{bizType},
         #{status},
         #{attribute},
         0,
         0,
         #{buyerMessage},
-        #{payType}
+        #{payType},
+        #{skuAmount},
+        #{sellerMessage},
+        #{approveTime},
+        #{fetchTime},
+        #{errorCode},
+        #{errorMessage},
+        #{payTime},
+        #{tradeSuccessTime}
         )
     </insert>
 
     <select id="queryById" resultMap="DiyStoreMainShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO" parameterType="java.lang.Long">
         select
         <include refid="all_column_list" />
-        from diystore_main_ship_order
+        from DSMainShipOrder
         where id = #{id}
     </select>
 
@@ -107,7 +167,7 @@
     <select id="queryByPage" resultMap="DiyStoreMainShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreMainShipOrderQuery">
         select
         <include refid="all_column_list" />
-        from diystore_main_ship_order
+        from DSMainShipOrder
         <include refid="base_where_clause" />
         order by gmt_create DESC
         limit #{startPos}, #{pageSize}
@@ -116,36 +176,69 @@
     <select id="query" resultMap="DiyStoreMainShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
         select
         <include refid="all_column_list" />
-        from diystore_main_ship_order
+        from DSMainShipOrder
     </select>
 
-    <select id="count" resultType="java.lang.Integer">
-        select count(id) from diystore_main_ship_order
+    <select id="count" resultType="java.lang.Integer" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreMainShipOrderQuery">
+        select count(id) from DSMainShipOrder
+        <include refid="base_where_clause" />
     </select>
+
+    <delete id="deleteByPage"  parameterType="com.gradutation.design.ljx.domain.query.DiyStoreMainShipOrderQuery">
+        DELETE
+        from DSMainShipOrder
+        <include refid="base_where_clause" />
+    </delete>
 
     <delete id="delete" parameterType="java.lang.Long">
-        delete from diystore_main_ship_order
+        delete from DSMainShipOrder
         where id = #{id}
     </delete>
 
     <update id="update" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO">
-        update diystore_main_ship_order
+        update DSMainShipOrder
         <set>
             gmt_modified = now(),
             row_version = row_version + 1,
-            <if test="status != null">status = #{status},</if>
-            <if test="rowStatus != null">row_status = #{rowStatus},</if>
-            <if test="attribute != null and attribute != '' ">attribute = #{attribute},</if>
-            <if test="phone != null and phone != '' ">phone = #{phone},</if>
-            <if test="mobilePhone != null and mobilePhone != '' ">mobile_phone = #{mobilePhone},</if>
-            <if test="prov != null and prov != '' ">prov = #{prov},</if>
-            <if test="city != null and city != '' ">city = #{city},</if>
-            <if test="area != null and area != '' ">area = #{area},</if>
-            <if test="town != null and town != '' ">town = #{town},</if>
-            <if test="address != null and address != '' ">address = #{address},</if>
-            <if test="buyerMessage != null and buyerMessage != '' ">buyer_message = #{buyerMessage},</if>
+            <if test="mainShipOrderId != null">main_ship_order_id=#{mainShipOrderId},</if>
+            <if test="buyerId != null">buyer_id=#{buyerId},</if>
+            <if test="buyerNick != null">buyer_nick=#{buyerNick},</if>
+            <if test="sellerId != null">seller_id=#{sellerId},</if>
+            <if test="sellerNick != null">seller_nick=#{sellerNick},</if>
+            <if test="consignee != null">consignee=#{consignee},</if>
+            <if test="postCode != null">post_code=#{postCode},</if>
+            <if test="phone != null">phone=#{phone},</if>
+            <if test="mobilePhone != null">mobile_phone=#{mobilePhone},</if>
+            <if test="country != null">country=#{country},</if>
+            <if test="prov != null">prov=#{prov},</if>
+            <if test="city != null">city=#{city},</if>
+            <if test="area != null">area=#{area},</if>
+            <if test="town != null">town=#{town},</if>
+            <if test="address != null">address=#{address},</if>
+            <if test="deliveryConfirmTime != null">delivery_confirm_time=#{deliveryConfirmTime},</if>
+            <if test="shipFormFee != null">ship_form_fee=#{shipFormFee},</if>
+            <if test="discountFee != null">discount_fee=#{discountFee},</if>
+            <if test="storeHouseCode != null">store_house_code=#{storeHouseCode},</if>
+            <if test="storeHouseName != null">store_house_name=#{storeHouseName},</if>
+            <if test="lbxNo != null">lbx_no=#{lbxNo},</if>
+            <if test="cancelDeliveryReason != null">cancel_delivery_reason=#{cancelDeliveryReason},</if>
+            <if test="shipType != null">ship_type=#{shipType},</if>
+            <if test="bizType != null">biz_type=#{bizType},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="attribute != null">attribute=#{attribute},</if>
+            <if test="rowStatus != null">row_status=#{rowStatus},</if>
+            <if test="buyerMessage != null">buyer_message=#{buyerMessage},</if>
+            <if test="payType != null">pay_type=#{payType},</if>
+            <if test="skuAmount != null">sku_amount=#{skuAmount},</if>
+            <if test="sellerMessage != null">seller_message=#{sellerMessage},</if>
+            <if test="approveTime != null">approve_time=#{approveTime},</if>
+            <if test="fetchTime != null">fetch_time=#{fetchTime},</if>
+            <if test="errorCode != null">error_code=#{errorCode},</if>
+            <if test="errorMessage != null">error_message=#{errorMessage},</if>
+            <if test="payTime != null">pay_time=#{payTime},</if>
+            <if test="tradeSuccessTime != null">trade_success_time=#{tradeSuccessTime}</if>
         </set>
-        where buyer_id = #{buyerId}  and id = #{id} and row_version = #{rowVersion}
+        where  id = #{id} and row_version = #{rowVersion}
     </update>
 
 </mapper>

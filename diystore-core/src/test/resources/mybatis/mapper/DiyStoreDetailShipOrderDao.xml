@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gradutation.design.ljx.dao.DiyStoreDetailShipOrderDao">
+
+    <resultMap id="DiyStoreDetailShipOrderResultMap" type="com.gradutation.design.ljx.domain.dataobject.DiyStoreDetailShipOrderDO">
+        <id column="id" property="id"/>
+        <result column="attribute" property="attribute"/>
+        <result column="biz_type" property="bizType"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="buyer_id" property="buyerId"/>
+        <result column="buyer_nick" property="buyerNick"/>
+        <result column="detail_ship_order_id" property="detailShipOrderId"/>
+        <result column="discount_fee" property="discountFee"/>
+        <result column="due_date" property="dueDate"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="goods_delivery_amount" property="goodsDeliveryAmount"/>
+        <result column="invoice_fee" property="invoiceFee"/>
+        <result column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="item_price" property="itemPrice"/>
+        <result column="lack_qty" property="lackQty"/>
+        <result column="lack_reason" property="lackReason"/>
+        <result column="main_ship_order_id" property="mainShipOrderId"/>
+        <result column="measure_unit" property="measureUnit"/>
+        <result column="purchase_order_no" property="purchaseOrderNo"/>
+        <result column="row_status" property="rowStatus"/>
+        <result column="row_version" property="rowVersion"/>
+        <result column="sc_item_id" property="scItemId"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="seller_nick" property="sellerNick"/>
+        <result column="ship_form_fee" property="shipFormFee"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="status" property="status"/>
+        <result column="store_management_type" property="storeManagementType"/>
+        <result column="supplier_id" property="supplierId"/>
+        <result column="supplier_name" property="supplierName"/>
+    </resultMap>
+
+    <!-- todo -->
+    <sql id="detailShipOrder_base_where_clause">
+        <where>
+            row_status = 0
+            <if test="id != null">and id = #{id} </if>
+            <if test="detailShipOrderId != null">and detail_ship_order_id = #{detailShipOrderId} </if>
+            <if test="status != null">and status = #{status} </if>
+            <if test="mainShipOrderId != null">and main_ship_order_id = #{mainShipOrderId}</if>
+            <if test="sellerId != null">and seller_id = #{sellerId}</if>
+            <if test="bizType != null">and biz_type = #{bizType}</if>
+        </where>
+    </sql>
+
+    <sql id="detailShipOrder_all_column_list">
+        id,
+        gmt_create,
+        gmt_modified,
+        detail_ship_order_id,
+        main_ship_order_id,
+        buyer_id,
+        buyer_nick,
+        seller_id,
+        seller_nick,
+        item_id,
+        sc_item_id,
+        sku_id,
+        purchase_order_no,
+        due_date,
+        store_management_type,
+        goods_delivery_amount,
+        item_name,
+        item_price,
+        brand_id,
+        brand_name,
+        supplier_id,
+        supplier_name,
+        measure_unit,
+        ship_form_fee,
+        discount_fee,
+        invoice_fee,
+        biz_type,
+        status,
+        attribute,
+        row_version,
+        row_status,
+        lack_qty,
+        lack_reason
+    </sql>
+
+    <insert id="insert" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreDetailShipOrderDO">
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into DSDetailShipOrder (
+        <include refid="detailShipOrder_all_column_list" />
+        )
+        values (
+        #{id},
+        <choose><when test="gmtCreate != null">#{gmtCreate}</when><otherwise>now()</otherwise></choose>,
+        <choose><when test="gmtModified != null">#{gmtModified}</when><otherwise>now()</otherwise></choose>,
+        #{detailShipOrderId},
+        #{mainShipOrderId},
+        #{buyerId},
+        #{buyerNick},
+        #{sellerId},
+        #{sellerNick},
+        #{itemId},
+        #{scItemId},
+        #{skuId},
+        #{purchaseOrderNo},
+        #{dueDate},
+        #{storeManagementType},
+        #{goodsDeliveryAmount},
+        #{itemName},
+        #{itemPrice},
+        #{brandId},
+        #{brandName},
+        #{supplierId},
+        #{supplierName},
+        #{measureUnit},
+        #{shipFormFee},
+        #{discountFee},
+        #{invoiceFee},
+        #{bizType},
+        #{status},
+        #{attribute},
+        0,
+        0,
+        #{lackQty},
+        #{lackReason}
+        )
+    </insert>
+
+    <select id="queryById" resultMap="DiyStoreDetailShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreDetailShipOrderDO" parameterType="java.lang.Long">
+        select
+        <include refid="detailShipOrder_all_column_list" />
+        from DSDetailShipOrder
+        where id = #{id}
+    </select>
+
+    <select id="queryByPage" resultMap="DiyStoreDetailShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreDetailShipOrderDO" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreDetailShipOrderQuery">
+        select
+        <include refid="detailShipOrder_all_column_list" />
+        from DSDetailShipOrder
+        <include refid="detailShipOrder_base_where_clause" />
+        order by gmt_create DESC
+        limit #{startPos}, #{pageSize}
+    </select>
+
+    <select id="query" resultMap="DiyStoreDetailShipOrderResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreDetailShipOrderDO">
+        select
+        <include refid="detailShipOrder_all_column_list" />
+        from DSDetailShipOrder
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreDetailShipOrderQuery">
+        select count(id) from DSDetailShipOrder
+        <include refid="detailShipOrder_base_where_clause" />
+    </select>
+
+    <delete id="deleteByPage"  parameterType="com.gradutation.design.ljx.domain.query.DiyStoreDetailShipOrderQuery">
+        DELETE
+        from DSDetailShipOrder
+        <include refid="detailShipOrder_base_where_clause" />
+    </delete>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from DSDetailShipOrder
+        where id = #{id}
+    </delete>
+
+    <!-- todo -->
+    <update id="update" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreDetailShipOrderDO">
+        update DSDetailShipOrder
+        <set>
+            gmt_modified = now(),
+            row_version = row_version + 1,
+            <if test="detailShipOrderId != null">detail_ship_order_id=#{detailShipOrderId},</if>
+            <if test="mainShipOrderId != null">main_ship_order_id=#{mainShipOrderId},</if>
+            <if test="buyerId != null">buyer_id=#{buyerId},</if>
+            <if test="buyerNick != null">buyer_nick=#{buyerNick},</if>
+            <if test="sellerId != null">seller_id=#{sellerId},</if>
+            <if test="sellerNick != null">seller_nick=#{sellerNick},</if>
+            <if test="itemId != null">item_id=#{itemId},</if>
+            <if test="scItemId != null">sc_item_id=#{scItemId},</if>
+            <if test="skuId != null">sku_id=#{skuId},</if>
+            <if test="purchaseOrderNo != null">purchase_order_no=#{purchaseOrderNo},</if>
+            <if test="dueDate != null">due_date=#{dueDate},</if>
+            <if test="storeManagementType != null">store_management_type=#{storeManagementType},</if>
+            <if test="goodsDeliveryAmount != null">goods_delivery_amount=#{goodsDeliveryAmount},</if>
+            <if test="itemName != null">item_name=#{itemName},</if>
+            <if test="itemPrice != null">item_price=#{itemPrice},</if>
+            <if test="brandId != null">brand_id=#{brandId},</if>
+            <if test="brandName != null">brand_name=#{brandName},</if>
+            <if test="supplierId != null">supplier_id=#{supplierId},</if>
+            <if test="supplierName != null">supplier_name=#{supplierName},</if>
+            <if test="measureUnit != null">measure_unit=#{measureUnit},</if>
+            <if test="shipFormFee != null">ship_form_fee=#{shipFormFee},</if>
+            <if test="discountFee != null">discount_fee=#{discountFee},</if>
+            <if test="invoiceFee != null">invoice_fee=#{invoiceFee},</if>
+            <if test="bizType != null">biz_type=#{bizType},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="attribute != null">attribute=#{attribute},</if>
+            <if test="lackQty != null">lack_qty=#{lackQty},</if>
+            <if test="lackReason != null">lack_reason=#{lackReason}</if>
+        </set>
+        where  id = #{id} and row_version = #{rowVersion}
+    </update>
+</mapper>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gradutation.design.ljx.dao.DiyStoreUserDao">
+    <resultMap id="DiyStoreUserResultMap" type="com.gradutation.design.ljx.domain.dataobject.DiyStoreUserDO">
+        <id column="id" property="id"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="user_id" property="userId"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="seller_nick" property="sellerNick"/>
+        <result column="buyer_id" property="buyerId"/>
+        <result column="buyer_nick" property="buyerNick"/>
+        <result column="user_type" property="userType"/>
+        <result column="actul_name" property="actulName"/>
+        <result column="sex" property="sex"/>
+        <result column="birthday" property="birthday"/>
+        <result column="prov" property="prov"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="town" property="town"/>
+        <result column="address" property="address"/>
+        <result column="phone" property="phone"/>
+        <result column="mobile_phone" property="mobilePhone"/>
+        <result column="status" property="status"/>
+        <result column="attribute" property="attribute"/>
+        <result column="row_version" property="rowVersion"/>
+        <result column="row_status" property="rowStatus"/>
+        <result column="image" property="image"/>
+        <result column="password" property="password"/>
+    </resultMap>
+
+    <sql id="all_column_list">
+        id,
+        gmt_create,
+        gmt_modified,
+        user_id,
+        seller_id,
+        seller_nick,
+        buyer_id,
+        buyer_nick,
+        user_type,
+        actul_name,
+        sex,
+        birthday,
+        prov,
+        city,
+        area,
+        town,
+        address,
+        phone,
+        mobile_phone,
+        status,
+        attribute,
+        row_version,
+        row_status,
+        image,
+        password
+    </sql>
+
+    <sql id="base_where_clause">
+        <where>
+            row_status = 0
+            <if test="id != null"> and id = #{id} </if>
+            <if test="userId != null">and user_id = #{userId} </if>
+            <if test="status != null"> and status = #{status} </if>
+            <if test="buyerId != null">and buyer_id = #{buyerId}</if>
+            <if test="sellerId != null">and seller_id = #{sellerId}</if>
+            <if test="sellerNick != null">and seller_nick = #{sellerNick}</if>
+            <if test="buyerNick != null">and buyer_nick = #{buyerNick}</if>
+            <if test="userType != null">and user_type = #{userType}</if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreUserDO">
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into DSUser (
+        <include refid="all_column_list" />
+        )
+        values (
+        #{id},
+        <choose><when test="gmtCreate != null">#{gmtCreate}</when><otherwise>now()</otherwise></choose>,
+        <choose><when test="gmtModified != null">#{gmtModified}</when><otherwise>now()</otherwise></choose>,
+        #{userId},
+        #{sellerId},
+        #{sellerNick},
+        #{buyerId},
+        #{buyerNick},
+        #{userType},
+        #{actulName},
+        #{sex},
+        #{birthday},
+        #{prov},
+        #{city},
+        #{area},
+        #{town},
+        #{address},
+        #{phone},
+        #{mobilePhone},
+        #{status},
+        #{attribute},
+        0,
+        0,
+        #{image},
+        #{password}
+        )
+    </insert>
+
+    <select id="queryById" resultMap="DiyStoreUserResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreUserDO" parameterType="java.lang.Long">
+        select
+        <include refid="all_column_list" />
+        from DSUser
+        where id = #{id}
+    </select>
+
+    <select id="queryByPage" resultMap="DiyStoreUserResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreUserDO" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreUserQuery">
+        select
+        <include refid="all_column_list" />
+        from DSUser
+        <include refid="base_where_clause" />
+        order by gmt_create DESC
+        limit #{startPos}, #{pageSize}
+    </select>
+
+    <select id="query" resultMap="DiyStoreUserResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreUserDO">
+        select
+        <include refid="all_column_list" />
+        from DSUser
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreUserQuery">
+        select count(id) from DSUser
+        <include refid="base_where_clause" />
+    </select>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from DSUser
+        where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreUserDO">
+        update DSUser
+        <set>
+            gmt_modified = now(),
+            row_version = row_version + 1,
+            <if test="userId != null">user_id=#{userId},</if>
+            <if test="sellerId != null">seller_id=#{sellerId},</if>
+            <if test="sellerNick != null">seller_nick=#{sellerNick},</if>
+            <if test="buyerId != null">buyer_id=#{buyerId},</if>
+            <if test="buyerNick != null">buyer_nick=#{buyerNick},</if>
+            <if test="userType != null">user_type=#{userType},</if>
+            <if test="actulName != null">actul_name=#{actulName},</if>
+            <if test="sex != null">sex=#{sex},</if>
+            <if test="birthday != null">birthday=#{birthday},</if>
+            <if test="prov != null">prov=#{prov},</if>
+            <if test="city != null">city=#{city},</if>
+            <if test="area != null">area=#{area},</if>
+            <if test="town != null">town=#{town},</if>
+            <if test="address != null">address=#{address},</if>
+            <if test="phone != null">phone=#{phone},</if>
+            <if test="mobilePhone != null">mobile_phone=#{mobilePhone},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="attribute != null">attribute=#{attribute},</if>
+            <if test="rowStatus != null">row_status=0,</if>
+            <if test="image != null">image=#{image},</if>
+            <if test="password != null">password=#{password}</if>
+        </set>
+        where  id = #{id} and row_version = #{rowVersion}
+    </update>
+
+
+
+</mapper>

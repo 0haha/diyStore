@@ -12,6 +12,7 @@
   </head>
   <body>
   Hello World!
+  <h1>SessionId:<%=session.getId()%>></h1>
   $END$
   </body>
 </html>

@@ -1,5 +1,12 @@
+import com.graduation.design.ljx.domain.dto.DiyStoreItemDTO;
+import com.graduation.design.ljx.domain.processorResult.DiyStorePageQueryResult;
+import com.graduation.design.ljx.domain.processorResult.DiyStoreProcessorResult;
+import com.graduation.design.ljx.service.DiyStoreItemDaoService;
+import com.gradutation.design.ljx.dao.DiyStoreItemDao;
 import com.gradutation.design.ljx.dao.DiyStoreMainShipOrderDao;
+import com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO;
 import com.gradutation.design.ljx.domain.dataobject.DiyStoreMainShipOrderDO;
+import com.gradutation.design.ljx.domain.query.DiyStoreItemQuery;
 import com.gradutation.design.ljx.domain.query.DiyStoreMainShipOrderQuery;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -35,16 +42,19 @@ public class myBatisTest {
    //     sqlSession.insert("com.gradutation.design.ljx.dao.DiyStoreMainShipOrderDao.insert",dd);
    //     sqlSession.commit();
 
-        DiyStoreMainShipOrderDao dao = sqlSession.getMapper(DiyStoreMainShipOrderDao.class);
-//        DiyStoreMainShipOrderDO dodo = dao.queryById(2L);
-
+        DiyStoreItemDao dao = sqlSession.getMapper(DiyStoreItemDao.class);
+        DiyStoreItemQuery q = new DiyStoreItemQuery();
+        q.setPageSize(6);
+        q.setPageIndex(1);
+        List<DiyStoreItemDO> dodo = dao.queryByPage(q);
+        System.out.println("mainShipOrder:"+dodo);
 //        DiyStoreMainShipOrderQuery query = new DiyStoreMainShipOrderQuery();
 //        query.setBuyerId(100L);
 //        List<DiyStoreMainShipOrderDO> ddd = dao.queryByPage(query);
 
 
-          dao.update(dd);
-          sqlSession.commit();
+          //dao.update(dd);
+          //sqlSession.commit();
           sqlSession.close();
           //Note: if you want to change the data record such as insert,update or delete you should commit in the end!
     }

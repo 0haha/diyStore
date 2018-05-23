@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gradutation.design.ljx.dao.DiyStoreItemDao">
+    <resultMap id="DiyStoreItemResultMap" type="com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO">
+        <id column="id" property="id"/>
+        <result column="attribute" property="attribute"/>
+        <result column="biz_type" property="bizType"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="discount_fee" property="discountFee"/>
+        <result column="due_date" property="dueDate"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="invoice_fee" property="invoiceFee"/>
+        <result column="item_actual_price" property="itemActualPrice"/>
+        <result column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="item_price" property="itemPrice"/>
+        <result column="lack_qty" property="lackQty"/>
+        <result column="lack_reason" property="lackReason"/>
+        <result column="material" property="material"/>
+        <result column="on_sale_time" property="onSaleTime"/>
+        <result column="picture" property="picture"/>
+        <result column="produce_place" property="producePlace"/>
+        <result column="purpose" property="purpose"/>
+        <result column="quality" property="quality"/>
+        <result column="row_status" property="rowStatus"/>
+        <result column="row_version" property="rowVersion"/>
+        <result column="sc_item_id" property="scItemId"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="seller_nick" property="sellerNick"/>
+        <result column="ship_form_fee" property="shipFormFee"/>
+        <result column="size" property="size"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="status" property="status"/>
+        <result column="store_management_type" property="storeManagementType"/>
+        <result column="supplier_id" property="supplierId"/>
+        <result column="supplier_name" property="supplierName"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <sql id="all_column_list">
+        id,
+        gmt_create,
+        gmt_modified,
+        item_id,
+        seller_id,
+        seller_nick,
+        sc_item_id,
+        sku_id,
+        due_date,
+        store_management_type,
+        item_name,
+        item_price,
+        item_actual_price,
+        brand_id,
+        brand_name,
+        supplier_id,
+        supplier_name,
+        ship_form_fee,
+        discount_fee,
+        invoice_fee,
+        biz_type,
+        status,
+        purpose,
+        produce_place,
+        attribute,
+        row_version,
+        row_status,
+        lack_qty,
+        lack_reason,
+        picture,
+        quality,
+        size,
+        material,
+        on_sale_time,
+        version
+    </sql>
+
+
+
+    <sql id="base_where_clause">
+        <where>
+            row_status = 0
+            <if test="id != null"> and id = #{id} </if>
+            <if test="sellerId != null"> and seller_id = #{sellerId} </if>
+            <if test="itemId != null">and item_id = #{itemId}</if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO">
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into DSItem(
+        <include refid="all_column_list" />
+        )
+        values (
+        #{id},
+        <choose><when test="gmtCreate != null">#{gmtCreate}</when><otherwise>now()</otherwise></choose>,
+        <choose><when test="gmtModified != null">#{gmtModified}</when><otherwise>now()</otherwise></choose>,
+        #{itemId},
+        #{sellerId},
+        #{sellerNick},
+        #{scItemId},
+        #{skuId},
+        #{dueDate},
+        #{storeManagementType},
+        #{itemName},
+        #{itemPrice},
+        #{itemActualPrice},
+        #{brandId},
+        #{brandName},
+        #{supplierId},
+        #{supplierName},
+        #{shipFormFee},
+        #{discountFee},
+        #{invoiceFee},
+        #{bizType},
+        #{status},
+        #{purpose},
+        #{producePlace},
+        #{attribute},
+        0,
+        0,
+        #{lackQty},
+        #{lackReason},
+        #{picture},
+        #{quality},
+        #{size},
+        #{material},
+        #{onSaleTime},
+        #{version}
+        )
+    </insert>
+
+    <select id="queryById" resultMap="DiyStoreItemResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO" parameterType="java.lang.Long">
+        select
+        <include refid="all_column_list" />
+        from DSItem
+        where id = #{id}
+    </select>
+
+
+    <select id="queryByPage" resultMap="DiyStoreItemResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreItemQuery">
+        select
+        <include refid="all_column_list" />
+        from DSItem
+        <include refid="base_where_clause" />
+        order by gmt_create DESC
+        limit #{startPos}, #{pageSize}
+    </select>
+
+
+    <select id="query" resultMap="DiyStoreItemResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO">
+        select
+        <include refid="all_column_list" />
+        from DSItem
+    </select>
+
+    <select id="queryByKeyWords" resultMap="DiyStoreItemResultMap" resultType="com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreItemQuery">
+        select
+        <include refid="all_column_list" />
+        from DSItem
+        where position(#{keyWords} IN item_name) > 0
+        order by gmt_create DESC
+        limit #{startPos}, #{pageSize}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="com.gradutation.design.ljx.domain.query.DiyStoreItemQuery">
+        select count(id) from DSItem
+        <include refid="base_where_clause" />
+    </select>
+
+
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from DSItem
+        where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.gradutation.design.ljx.domain.dataobject.DiyStoreItemDO">
+        update DSItem
+        <set>
+            gmt_modified = now(),
+            row_version = row_version + 1,
+            <if test="itemId != null">item_id=#{itemId},</if>
+            <if test="sellerId != null">seller_id=#{sellerId},</if>
+            <if test="sellerNick != null">seller_nick=#{sellerNick},</if>
+            <if test="scItemId != null">sc_item_id=#{scItemId},</if>
+            <if test="skuId != null">sku_id=#{skuId},</if>
+            <if test="dueDate != null">due_date=#{dueDate},</if>
+            <if test="storeManagementType != null">store_management_type=#{storeManagementType},</if>
+            <if test="itemName != null">item_name=#{itemName},</if>
+            <if test="itemPrice != null">item_price=#{itemPrice},</if>
+            <if test="itemActualPrice != null">item_actual_price=#{itemActualPrice},</if>
+            <if test="brandId != null">brand_id=#{brandId},</if>
+            <if test="brandName != null">brand_name=#{brandName},</if>
+            <if test="supplierId != null">supplier_id=#{supplierId},</if>
+            <if test="supplierName != null">supplier_name=#{supplierName},</if>
+            <if test="shipFormFee != null">ship_form_fee=#{shipFormFee},</if>
+            <if test="discountFee != null">discount_fee=#{discountFee},</if>
+            <if test="invoiceFee != null">invoice_fee=#{invoiceFee},</if>
+            <if test="bizType != null">biz_type=#{bizType},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="purpose != null">purpose=#{purpose},</if>
+            <if test="producePlace != null">produce_place=#{producePlace},</if>
+            <if test="attribute != null">attribute=#{attribute},</if>
+            <if test="lackQty != null">lack_qty=#{lackQty},</if>
+            <if test="lackReason != null">lack_reason=#{lackReason},</if>
+            <if test="picture != null">picture=#{picture},</if>
+            <if test="quality != null">quality=#{quality},</if>
+            <if test="size != null">size=#{size},</if>
+            <if test="material != null">material=#{material},</if>
+            <if test="onSaleTime != null">on_sale_time=#{onSaleTime},</if>
+            <if test="version != null">version=#{version}</if>
+        </set>
+        where id = #{id} and row_version = #{rowVersion}
+    </update>
+
+
+</mapper>

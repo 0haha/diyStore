@@ -15,7 +15,7 @@ export JDK_PATH="./tomcat&&jdk/"
 export TOMCAT_PATH="./tomcat&&jdk/"
 export NGINX_PATH="./nginx/"
 export JDK_TAR_NAME="jdk-8u161-linux-x64.tar.gz"
-export TOMCAT_TAR_NAME="apache-tomcat-9.0.4.tar.gz"
+export TOMCAT_TAR_NAME="apache-tomcat-7.0.88.tar.gz"
 export NGINX_CONF_NAME="nginx.conf"
 export ipa="ipa"
 export ipb="ipb"
@@ -52,6 +52,12 @@ check_conf_exist(){
    fi
 }
 
+produce_tomcat_context(){
+  export ipc=$(sudo docker inspect $(docker ps| grep 'redis:v1' |awk '{print $1}') | grep '"IPAddress"'| head -1 | awk -F \" '{ print $4}')
+
+      sed -i "s/ipc/${ipc}/g" redis/context.xml
+}
+
 produce_nginx_conf(){
 
  export ipa=$(sudo docker inspect $(docker ps| grep 'webbase:v1' |awk '{print $1}') | grep '"IPAddress"'| head -1 | awk -F \" '{ print $4}')
@@ -61,7 +67,9 @@ produce_nginx_conf(){
      sed -i "s/ipb/${ipb}/g" nginx/nginx.conf
 
 }
-
+write_back_tomcat_context(){
+     sed -i  "13s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/ipc/g" redis/context.xml
+}
 write_back_nginx_conf(){
 
      sed -i  "34s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/ipa/g" nginx/nginx.conf
@@ -72,8 +80,10 @@ build_and_run_tomcatjdk_docker(){
    echo "Now begin to build the docker images webbase:v1 and webbase:v2"
    docker build -t webbase:v1 ${TOMCAT_PATH} || exit 3
    docker build -t webbase:v2 ${TOMCAT_PATH} || exit 3
-   docker run -d webbase:v1 || exit 3
-   docker run -d webbase:v2 || exit 3
+  docker run --env HOST_IP=172.17.0.1 -v $(cd `dirname $0`;pwd)/redis/context.xml:/home/admin/diyStore/tomcat/apache-tomcat-7.0.88/conf/context.xml:rw -d webbase:v1 || exit 3
+  docker run --env HOST_IP=172.17.0.1 -v $(cd `dirname $0`;pwd)/redis/context.xml:/home/admin/diyStore/tomcat/apache-tomcat-7.0.88/conf/context.xml:rw -d webbase:v2 || exit 3
+#   docker run -d webbase:v1 || exit 3
+#   docker run -d webbase:v2 || exit 3
 }
 
 clean_docker_none(){
@@ -107,21 +117,40 @@ start_zookeeper_docker(){
 stop_zookeeper_docker(){
     docker ps -a |  grep 'zookeeper' | awk '{print $1}' |  xargs --no-run-if-empty docker stop || exit 1
 }
+start_mysql_docker(){
+    docker run  -v diystore.sql:/home/diystore.sql -v data:/var/lib/mysql -v conf:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=110 -d    mysql:latest  || exit  5
+}
+stop_mysql_docker(){
+    docker ps -a |  grep 'mysql' | awk '{print $1}' |  xargs --no-run-if-empty docker stop || exit 1
+}
+start_redis_docker(){
+    docker run -d redis:v1 || exit  5
+}
 
+stop_redis_docker(){
+   write_back_tomcat_context
+   docker ps -a |  grep 'redis' | awk '{print $1}' |  xargs --no-run-if-empty docker stop || exit 1
+}
 start(){
    check_war_exist
    check_conf_exist
+   start_zookeeper_docker
+   start_mysql_docker
+   start_redis_docker
+   produce_tomcat_context
    build_and_run_tomcatjdk_docker
    clean_docker_none
    produce_nginx_conf
    run_nginx_docker
-   start_zookeeper_docker
+
 }
 
 stop(){
    stop_tomcatjdk_docker
    stop_nginx_docker
    stop_zookeeper_docker
+   stop_redis_docker
+   stop_mysql_docker
 }
 
 restart(){
